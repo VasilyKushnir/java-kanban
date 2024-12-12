@@ -1,7 +1,11 @@
+import taskmanager.TaskManager;
+import tasks.Epic;
+import tasks.Subtask;
+import tasks.Task;
+import tasks.TaskStatus;
 
 public class Main {
     public static void main(String[] args) {
-
         TaskManager tm = new TaskManager();
 
         Task task1 = new Task("Повернуть", "Направо", TaskStatus.DONE);
@@ -34,24 +38,33 @@ public class Main {
         System.out.println(tm.getEpic(5));
 
         Task task1Updated = new Task("Повернуть", "Налево", TaskStatus.DONE);
-        tm.updateTask(1, task1Updated);
+        task1Updated.setId(1);
+        tm.updateTask(task1Updated);
 
         Task task2Updated = new Task("Пройти вперёд", "500 метров по грунтовке", TaskStatus.DONE);
-        tm.updateTask(2, task2Updated);
+        task2Updated.setId(2);
+        tm.updateTask(task2Updated);
 
         Epic epic1Updated = new Epic("Найти нужный дом", "5-ти этажный");
-        tm.updateEpic(3, epic1Updated);
+        epic1Updated.setId(3);
+        epic1Updated.addInSubtaskIds(4);
+        tm.updateEpic(epic1Updated);
 
         Subtask subtask1Updated = new Subtask(3, "Достать телефон", "Открыть приложение",
                 TaskStatus.DONE);
-        tm.updateSubtask(4, subtask1Updated);
+        subtask1Updated.setId(4);
+        tm.updateSubtask(subtask1Updated);
 
         Epic epic2Updated = new Epic("Забрать посылку", "Найти нужную квартиру");
-        tm.updateEpic(5, epic2Updated);
+        epic2Updated.setId(5);
+        epic2Updated.addInSubtaskIds(6);
+        epic2Updated.addInSubtaskIds(7);
+        tm.updateEpic(epic2Updated);
 
         Subtask subtask2Updated = new Subtask(5, "Узнать этаж", "Проверить по почтовым ящикам",
                 TaskStatus.IN_PROGRESS);
-        tm.updateSubtask(6, subtask2Updated);
+        subtask2Updated.setId(6);
+        tm.updateSubtask(subtask2Updated);
 
         tm.removeSubtask(7);
 
@@ -59,6 +72,5 @@ public class Main {
         System.out.println(tm.getTask(2));
         System.out.println(tm.getEpic(3));
         System.out.println(tm.getEpic(5));
-
     }
 }
