@@ -1,3 +1,4 @@
+import taskmanager.Managers;
 import taskmanager.TaskManager;
 import tasks.Epic;
 import tasks.Subtask;
@@ -6,7 +7,8 @@ import tasks.TaskStatus;
 
 public class Main {
     public static void main(String[] args) {
-        TaskManager tm = new TaskManager();
+        Managers managers = new Managers();
+        TaskManager tm = managers.getDefault();
 
         Task task1 = new Task("Повернуть", "Направо", TaskStatus.DONE);
         tm.createTask(task1);
