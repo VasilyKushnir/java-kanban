@@ -10,13 +10,22 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        if (task == null) return;
-        viewedTasks.addLast(task);
+        if (task == null) {
+            return;
+        } else if (viewedTasks.contains(task)) {
+            viewedTasks.remove(task);
+            viewedTasks.addLast(task);
+        }
     }
 
     @Override
     public void remove(int id) {
         viewedTasks.remove(id);
+        for (Task task : viewedTasks) {
+            if (task.getId() == id) {
+                viewedTasks.remove(task);
+            }
+        }
     }
 
     @Override
