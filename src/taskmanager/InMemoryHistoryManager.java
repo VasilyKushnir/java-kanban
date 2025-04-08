@@ -2,18 +2,21 @@ package taskmanager;
 
 import tasks.Task;
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class InMemoryHistoryManager implements HistoryManager {
 
-    private final ArrayList<Task> viewedTasks = new ArrayList<>();
+    private final LinkedList<Task> viewedTasks = new LinkedList<>();
 
     @Override
     public void add(Task task) {
         if (task == null) return;
-        if (viewedTasks.size() >= 10) {
-            viewedTasks.removeFirst();
-        }
         viewedTasks.addLast(task);
+    }
+
+    @Override
+    public void remove(int id) {
+        viewedTasks.remove(id);
     }
 
     @Override
