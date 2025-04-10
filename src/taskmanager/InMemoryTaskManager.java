@@ -4,8 +4,10 @@ import tasks.Task;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.TaskStatus;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
     private int id = 0;
@@ -162,17 +164,29 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void clearTasks() {
+        for (Integer key : tasks.keySet()) {
+            historyManager.remove(key);
+        }
         tasks.clear();
     }
 
     @Override
     public void clearEpics() {
+        for (Map.Entry<Integer, Epic> epicEntry : epics.entrySet()) {
+            for (Integer subtaskId : epicEntry.getValue().getSubtaskIds()) {
+                historyManager.remove(subtaskId);
+            }
+            historyManager.remove(epicEntry.getKey());
+        }
         epics.clear();
         subtasks.clear();
     }
 
     @Override
     public void clearSubtasks() {
+        for (Integer key : subtasks.keySet()) {
+            historyManager.remove(key);
+        }
         subtasks.clear();
         for (Epic epic : epics.values()) {
             epic.eraseSubtaskIds();
@@ -212,7 +226,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Task> getHistory() {
+    public List<Task> getHistory() {
         return historyManager.getHistory();
     }
 }
