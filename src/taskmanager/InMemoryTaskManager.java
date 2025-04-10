@@ -4,6 +4,7 @@ import tasks.Task;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.TaskStatus;
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class InMemoryTaskManager implements TaskManager {
         epic.setId(++id);
         epics.put(epic.getId(), epic);
     }
-    
+
     @Override
     public void createSubtask(Subtask subtask) {
         if (epics.containsKey(subtask.getEpicId())) {
