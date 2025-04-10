@@ -3,10 +3,21 @@ package taskmanager;
 import tasks.Task;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.HashMap;
 
 public class InMemoryHistoryManager implements HistoryManager {
+
+    private static class Node<T> {
+        T task;
+        Node<T> prev;
+        Node<T> next;
+
+        Node(T task, Node<T> prev, Node<T> next) {
+            this.task = task;
+            this.prev = prev;
+            this.next = next;
+        }
+    }
 
     Node<Task> head;
     Node<Task> tail;
@@ -76,16 +87,4 @@ public class InMemoryHistoryManager implements HistoryManager {
         return getTasks();
     }
 
-}
-
-class Node<T> {
-    T task;
-    Node<T> prev;
-    Node<T> next;
-
-    Node(T task, Node<T> prev, Node<T> next) {
-        this.task = task;
-        this.prev = prev;
-        this.next = next;
-    }
 }

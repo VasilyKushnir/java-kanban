@@ -128,12 +128,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeTask(int key) {
-        System.out.println(tasks.size());
         if (tasks.containsKey(key)) {
             tasks.remove(key);
             historyManager.remove(key);
         }
-        System.out.println(tasks.size());
     }
 
     @Override
