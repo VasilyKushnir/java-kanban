@@ -3,6 +3,7 @@ package taskmanager;
 import tasks.Task;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.HashMap;
 
 public class InMemoryHistoryManager implements HistoryManager {
