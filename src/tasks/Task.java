@@ -60,11 +60,10 @@ public class Task {
 
     @Override
     public String toString() {
-        return "tasks.Task{ " +
-                "id=" + getId() +
-                ", name='" + getName() + '\'' +
-                ", description='" + getDescription() + '\'' +
-                ", taskStatus=" + getStatus() +
-                " }";
+        return getId().toString() + ',' +
+                TaskType.TASK + ',' +
+                getName() + ',' +
+                getStatus() + ',' +
+                getDescription() + ',';
     }
 }
