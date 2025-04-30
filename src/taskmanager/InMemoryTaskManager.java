@@ -11,11 +11,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManager {
-    private int id = 0;
+    protected int id = 0;
 
-    private final HashMap<Integer, Task> tasks = new HashMap<>();
-    private final HashMap<Integer, Epic> epics = new HashMap<>();
-    private final HashMap<Integer, Subtask> subtasks = new HashMap<>();
+    protected final HashMap<Integer, Task> tasks = new HashMap<>();
+    protected final HashMap<Integer, Epic> epics = new HashMap<>();
+    protected final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private final HistoryManager historyManager;
 
     public InMemoryTaskManager(HistoryManager historyManager) {
@@ -39,7 +39,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (epics.containsKey(subtask.getEpicId())) {
             subtask.setId(++id);
             subtasks.put(subtask.getId(), subtask);
-            Epic epic = getEpic(subtask.getEpicId());
+            Epic epic = epics.get(subtask.getEpicId());
             epic.addInSubtaskIds(subtask.getId());
             updateEpicStatus(epic);
         }
@@ -113,6 +113,13 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public ArrayList<Subtask> getSubtaskList() {
         return new ArrayList<>(subtasks.values());
+    }
+
+    protected ArrayList<Task> getMergedList() {
+        List<Task> merged = new ArrayList<>(getTaskList());
+        merged.addAll(getEpicList());
+        merged.addAll(getSubtaskList());
+        return new ArrayList<>(merged);
     }
 
     @Override
