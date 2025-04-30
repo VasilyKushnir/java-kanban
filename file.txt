@@ -1,6 +1,9 @@
 1,TASK,Повернуть,DONE,Налево,
 2,TASK,Пройти вперёд,DONE,500 метров по грунтовке,
 7,TASK,Task,IN_PROGRESS,Description,
+8,TASK,Task,IN_PROGRESS,Description,
+9,TASK,Task,IN_PROGRESS,Description,
+10,TASK,Task,IN_PROGRESS,Description,
 3,EPIC,Найти нужный дом,DONE,5-ти этажный,
 5,EPIC,Забрать посылку,IN_PROGRESS,Найти нужную квартиру,
 4,SUBTASK,Достать телефон,DONE,Открыть приложение,3

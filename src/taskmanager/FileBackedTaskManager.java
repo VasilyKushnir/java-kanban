@@ -26,9 +26,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                     if (task.getId() > super.id) {
                         super.id = task.getId();
                     }
-                    if (task instanceof Epic epic) {
+                    if (task.getType().equals(TaskType.EPIC)) {
+                        Epic epic = (Epic) task;
                         super.epics.put(epic.getId(), epic);
-                    } else if (task instanceof Subtask subtask) {
+                    } else if (task.getType().equals(TaskType.SUBTASK)) {
+                        Subtask subtask = (Subtask) task;
                         super.subtasks.put(subtask.getId(), subtask);
                         int epicId = subtask.getEpicId();
                         Epic epic = super.epics.get(epicId);
@@ -56,16 +58,16 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
     private Task fromString(String string) {
         String[] stringTaskArray = string.split(",");
-        String taskType = stringTaskArray[1];
+        TaskType taskType = TaskType.valueOf(stringTaskArray[1]);
         int taskId = Integer.parseInt(stringTaskArray[0]);
         String taskName = stringTaskArray[2];
         String taskDescription = stringTaskArray[4];
         TaskStatus taskStatus = TaskStatus.valueOf(stringTaskArray[3]);
         switch (taskType) {
-            case "EPIC" -> {
+            case TaskType.EPIC -> {
                 return new Epic(taskId, taskName, taskDescription, taskStatus, new ArrayList<>());
             }
-            case "SUBTASK" -> {
+            case TaskType.SUBTASK -> {
                 int taskEpicId = Integer.parseInt(stringTaskArray[5]);
                 return new Subtask(taskId, taskName, taskDescription, taskStatus, taskEpicId);
             }
