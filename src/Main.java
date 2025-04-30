@@ -13,20 +13,20 @@ public class Main {
 
         tm.createTask(new Task(1, "Task", "Description", TaskStatus.IN_PROGRESS));
 
-//        ArrayList<Task> tasks = tm.getTaskList();
-//        for (Task t : tasks) {
-//            System.out.println(t);
-//        }
-//
-//        ArrayList<Epic> epics = tm.getEpicList();
-//        for (Task t : epics) {
-//            System.out.println(t);
-//        }
-//
-//        ArrayList<Subtask> subtasks = tm.getSubtaskList();
-//        for (Task t : subtasks) {
-//            System.out.println(t);
-//        }
+        ArrayList<Task> tasks = tm.getTaskList();
+        for (Task t : tasks) {
+            System.out.println(t);
+        }
+
+        ArrayList<Epic> epics = tm.getEpicList();
+        for (Task t : epics) {
+            System.out.println(t);
+        }
+
+        ArrayList<Subtask> subtasks = tm.getSubtaskList();
+        for (Task t : subtasks) {
+            System.out.println(t);
+        }
 
 
 //        Task task1 = new Task("Повернуть", "Направо", TaskStatus.DONE);
