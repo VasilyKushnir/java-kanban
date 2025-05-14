@@ -6,6 +6,8 @@ import tasks.*;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
@@ -46,10 +48,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     private void save() {
-        ArrayList<Task> merged = new ArrayList<>(super.getMergedList());
+        ArrayList<Task> merged = new ArrayList<>(super.getMergedList()); // все задачи
         try (Writer fw = new FileWriter(path.toString())) {
             for (Task t : merged) {
-                fw.write(t.toString() + '\n');
+                fw.write(t.serialize() + '\n');
             }
         } catch (IOException e) {
             throw new ManagerSaveException();
@@ -58,21 +60,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
     private Task fromString(String string) {
         String[] stringTaskArray = string.split(",");
-        TaskType taskType = TaskType.valueOf(stringTaskArray[1]);
-        int taskId = Integer.parseInt(stringTaskArray[0]);
-        String taskName = stringTaskArray[2];
-        String taskDescription = stringTaskArray[4];
-        TaskStatus taskStatus = TaskStatus.valueOf(stringTaskArray[3]);
+        TaskType taskType = TaskType.valueOf(stringTaskArray[1]); // 1 = TaskType
+        int taskId = Integer.parseInt(stringTaskArray[0]); // 0 = id
+        String taskName = stringTaskArray[2]; // 2 = String
+        String taskDescription = stringTaskArray[4]; // 4 = String
+        TaskStatus taskStatus = TaskStatus.valueOf(stringTaskArray[3]); // 3 = TaskStatus
+        LocalDateTime startTime = LocalDateTime.parse(stringTaskArray[6]);
+        LocalDateTime endTime = LocalDateTime.parse(stringTaskArray[7]);
+        Duration duration = Duration.ofMinutes(Integer.parseInt(stringTaskArray[8]));
         switch (taskType) {
             case TaskType.EPIC -> {
-                return new Epic(taskId, taskName, taskDescription, taskStatus, new ArrayList<>());
+                return new Epic(taskId, taskName, taskDescription, taskStatus, new ArrayList<>(), startTime, endTime,
+                        duration);
             }
             case TaskType.SUBTASK -> {
                 int taskEpicId = Integer.parseInt(stringTaskArray[5]);
-                return new Subtask(taskId, taskName, taskDescription, taskStatus, taskEpicId);
+                return new Subtask(taskId, taskName, taskDescription, taskStatus, taskEpicId, duration, startTime);
             }
             default -> {
-                return new Task(taskId, taskName, taskDescription, taskStatus);
+                return new Task(taskId, taskName, taskDescription, taskStatus, duration, startTime);
             }
         }
     }

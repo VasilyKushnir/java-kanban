@@ -10,8 +10,8 @@ public class Task {
     private final String description;
     private TaskStatus status;
     private final TaskType type = TaskType.TASK;
-    private final Duration duration;
-    private final LocalDateTime startTime;
+    private Duration duration;
+    private LocalDateTime startTime;
 
     public Task(String name, String description, TaskStatus status, Duration duration, LocalDateTime startTime) {
         this.name = name;
@@ -51,7 +51,7 @@ public class Task {
         return status;
     }
 
-    public void setStatus(TaskStatus status) { // new
+    public void setStatus(TaskStatus status) {
         this.status = status;
     }
 
@@ -59,8 +59,24 @@ public class Task {
         return type;
     }
 
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
     public LocalDateTime getEndTime() {
         return startTime.plus(duration);
+    }
+
+    public void setDuration(Duration duration) {
+        this.duration = duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
     }
 
     @Override
@@ -78,10 +94,27 @@ public class Task {
 
     @Override
     public String toString() {
+        return "Task{" +
+                "Id='" + getId().toString() + "', " +
+                "TaskType='" + TaskType.TASK + "', " +
+                "Name='" + getName() + "', " +
+                "Status='" + getStatus() + "', " +
+                "Description='" + getDescription() + "', " +
+                "StartTime='" + getStartTime() + "', " +
+                "EndTime='" + getEndTime() + "', " +
+                "Duration='" + getDuration().toMinutes() +
+                "'}";
+    }
+
+    public String serialize() {
         return getId().toString() + ',' +
                 TaskType.TASK + ',' +
                 getName() + ',' +
                 getStatus() + ',' +
-                getDescription() + ',';
+                getDescription() + ',' +
+                "-1," +
+                getStartTime() + ',' +
+                getEndTime() + ',' +
+                getDuration().toMinutes();
     }
 }
