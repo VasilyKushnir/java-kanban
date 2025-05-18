@@ -107,7 +107,7 @@ public abstract class TaskManagerTest<T extends TaskManager>{
         taskManager.createSubtask(new Subtask(5, "NewSubtask1", "Description newSubtask1",
                 TaskStatus.IN_PROGRESS, Duration.ofMinutes(90),
                 LocalDateTime.of(2025, Month.JUNE, 8, 17, 30)));
-        assertNull(taskManager.getSubtasksForEpic(5));
+        assertEquals(0, taskManager.getSubtasksForEpic(5).size());
         assertEquals(0, taskManager.getSubtaskList().size());
     }
 
@@ -139,7 +139,7 @@ public abstract class TaskManagerTest<T extends TaskManager>{
         assertEquals(3, subtasksForEpic.size());
         taskManager.removeEpic(1);
         assertEquals(0, taskManager.getEpicList().size());
-        assertNull(taskManager.getSubtasksForEpic(1));
+        assertEquals(0, taskManager.getSubtasksForEpic(1).size());
         assertEquals(0, taskManager.getSubtaskList().size());
     }
 
@@ -218,8 +218,8 @@ public abstract class TaskManagerTest<T extends TaskManager>{
         assertEquals(1, taskManager.getSubtasksForEpic(1).size());
         assertEquals(1, taskManager.getSubtasksForEpic(3).size());
         taskManager.clearEpics();
-        assertNull(taskManager.getSubtasksForEpic(1));
-        assertNull(taskManager.getSubtasksForEpic(3));
+        assertEquals(0, taskManager.getSubtasksForEpic(1).size());
+        assertEquals(0, taskManager.getSubtasksForEpic(3).size());
     }
 
     @Test
@@ -325,7 +325,7 @@ public abstract class TaskManagerTest<T extends TaskManager>{
             taskManager.createSubtask(subtask);
         }
         ArrayList<Subtask> subtasksForEpic = taskManager.getSubtasksForEpic(5);
-        assertNull(subtasksForEpic);
+        assertEquals(0, subtasksForEpic.size());
     }
 
     @Test
