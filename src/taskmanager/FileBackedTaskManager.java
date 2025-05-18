@@ -16,6 +16,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
     public FileBackedTaskManager(HistoryManager historyManager, Path path) {
         super(historyManager);
+        if (path == null) {
+            throw new RuntimeException();
+        }
         this.path = path;
     }
 
@@ -34,11 +37,13 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                     } else if (task.getType().equals(TaskType.SUBTASK)) {
                         Subtask subtask = (Subtask) task;
                         super.subtasks.put(subtask.getId(), subtask);
+                        super.prioritizedTasksSet.add(subtask);
                         int epicId = subtask.getEpicId();
                         Epic epic = super.epics.get(epicId);
                         epic.addInSubtaskIds(subtask.getId());
                     } else {
                         super.tasks.put(task.getId(), task);
+                        super.prioritizedTasksSet.add(task);
                     }
                 }
             } catch (IOException e) {
@@ -48,7 +53,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     }
 
     private void save() {
-        ArrayList<Task> merged = new ArrayList<>(super.getMergedList()); // все задачи
+        ArrayList<Task> merged = new ArrayList<>(super.getMergedList());
         try (Writer fw = new FileWriter(path.toString())) {
             for (Task t : merged) {
                 fw.write(t.serialize() + '\n');
@@ -60,11 +65,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
     private Task fromString(String string) {
         String[] stringTaskArray = string.split(",");
-        TaskType taskType = TaskType.valueOf(stringTaskArray[1]); // 1 = TaskType
-        int taskId = Integer.parseInt(stringTaskArray[0]); // 0 = id
-        String taskName = stringTaskArray[2]; // 2 = String
-        String taskDescription = stringTaskArray[4]; // 4 = String
-        TaskStatus taskStatus = TaskStatus.valueOf(stringTaskArray[3]); // 3 = TaskStatus
+        TaskType taskType = TaskType.valueOf(stringTaskArray[1]);
+        int taskId = Integer.parseInt(stringTaskArray[0]);
+        String taskName = stringTaskArray[2];
+        String taskDescription = stringTaskArray[4];
+        TaskStatus taskStatus = TaskStatus.valueOf(stringTaskArray[3]);
         LocalDateTime startTime = LocalDateTime.parse(stringTaskArray[6]);
         LocalDateTime endTime = LocalDateTime.parse(stringTaskArray[7]);
         Duration duration = Duration.ofMinutes(Integer.parseInt(stringTaskArray[8]));
@@ -151,7 +156,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
     @Override
     public void clearSubtasks() {
-        super.clearEpics();
+        super.clearSubtasks();
         save();
     }
 
