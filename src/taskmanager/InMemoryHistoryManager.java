@@ -42,7 +42,7 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        tasksHashMap.remove(task.getId());
+        remove(task.getId());
         linkLast(task);
     }
 

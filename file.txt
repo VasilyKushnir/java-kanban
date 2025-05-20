@@ -1,6 +1,4 @@
-1,TASK,Повернуть,DONE,Налево,
-2,TASK,Пройти вперёд,DONE,500 метров по грунтовке,
-3,EPIC,Найти нужный дом,DONE,5-ти этажный,
-5,EPIC,Забрать посылку,IN_PROGRESS,Найти нужную квартиру,
-4,SUBTASK,Достать телефон,DONE,Открыть приложение,3
-6,SUBTASK,Узнать этаж,IN_PROGRESS,Проверить по почтовым ящикам,5
+1,TASK,FileTask1,NEW,Description fileTask1,-1,2025-05-25T12:00,2025-05-26T13:30,90
+2,EPIC,FileEpic1,NEW,Description fileEpic1,-1,2025-05-25T09:00,2025-05-26T11:30,150
+3,SUBTASK,FileSubtask1,NEW,Description fileSubtask1,2,2025-05-25T09:00,2025-05-26T10:00,60
+4,SUBTASK,FileSubtask2,NEW,Description fileSubtask2,2,2025-05-25T10:00,2025-05-26T11:30,90

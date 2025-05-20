@@ -1,19 +1,24 @@
 package tasks;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Epic extends Task {
     private final ArrayList<Integer> subtaskIds;
     private final TaskType type = TaskType.EPIC;
+    LocalDateTime endTime;
 
     public Epic(String name, String description) {
-        super(name, description, TaskStatus.NEW);
+        super(name, description, TaskStatus.NEW, Duration.ZERO, null);
         this.subtaskIds = new ArrayList<>();
     }
 
-    public Epic(Integer id, String name, String description, TaskStatus taskStatus, ArrayList<Integer> subtaskIds) {
-        super(id, name, description, taskStatus);
+    public Epic(Integer id, String name, String description, TaskStatus taskStatus, ArrayList<Integer> subtaskIds,
+                LocalDateTime startTime, LocalDateTime endTime, Duration duration) {
+        super(id, name, description, taskStatus, duration, startTime);
         this.subtaskIds = subtaskIds;
+        this.endTime = endTime;
     }
 
     public ArrayList<Integer> getSubtaskIds() {
@@ -32,6 +37,15 @@ public class Epic extends Task {
         subtaskIds.clear();
     }
 
+    public void setEndTime(LocalDateTime endTime) {
+        this.endTime = endTime;
+    }
+
+    @Override
+    public LocalDateTime getEndTime() {
+        return this.endTime;
+    }
+
     @Override
     public TaskType getType() {
         return type;
@@ -39,10 +53,27 @@ public class Epic extends Task {
 
     @Override
     public String toString() {
+        return "Epic{" +
+                "Id='" + getId() + "', " +
+                "TaskType='" + TaskType.EPIC + "', " +
+                "Name='" + getName() + "', " +
+                "Status='" + getStatus() + "', " +
+                "Description='" + getDescription() + "', " +
+                "StartTime='" + getStartTime() + "', " +
+                "EndTime='" + getEndTime() + "', " +
+                "Duration='" + getDuration().toMinutes() +
+                "'}";
+    }
+
+    public String toFileString() {
         return getId().toString() + ',' +
                 TaskType.EPIC + ',' +
                 getName() + ',' +
                 getStatus() + ',' +
-                getDescription() + ',';
+                getDescription() + ',' +
+                "-1," +
+                getStartTime() + ',' +
+                getEndTime() + ',' +
+                getDuration().toMinutes();
     }
 }
