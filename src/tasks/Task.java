@@ -64,7 +64,7 @@ public class Task {
     }
 
     public LocalDateTime getStartTime() {
-        return startTime;
+        return this.startTime;
     }
 
     public LocalDateTime getEndTime() {
@@ -106,7 +106,7 @@ public class Task {
                 "'}";
     }
 
-    public String serialize() {
+    public String toFileString() {
         return getId().toString() + ',' +
                 TaskType.TASK + ',' +
                 getName() + ',' +

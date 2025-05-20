@@ -44,7 +44,7 @@ public class Subtask extends Task {
                 "'}";
     }
 
-    public String serialize() {
+    public String toFileString() {
         return getId().toString() + ',' +
                 TaskType.SUBTASK + ',' +
                 getName() + ',' +

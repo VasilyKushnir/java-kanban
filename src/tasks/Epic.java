@@ -43,7 +43,7 @@ public class Epic extends Task {
 
     @Override
     public LocalDateTime getEndTime() {
-        return endTime;
+        return this.endTime;
     }
 
     @Override
@@ -65,7 +65,7 @@ public class Epic extends Task {
                 "'}";
     }
 
-    public String serialize() {
+    public String toFileString() {
         return getId().toString() + ',' +
                 TaskType.EPIC + ',' +
                 getName() + ',' +

@@ -56,7 +56,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         ArrayList<Task> merged = new ArrayList<>(super.getMergedList());
         try (Writer fw = new FileWriter(path.toString())) {
             for (Task t : merged) {
-                fw.write(t.serialize() + '\n');
+                fw.write(t.toFileString() + '\n');
             }
         } catch (IOException e) {
             throw new ManagerSaveException();
