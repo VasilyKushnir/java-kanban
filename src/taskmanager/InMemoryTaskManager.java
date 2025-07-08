@@ -1,11 +1,11 @@
 package taskmanager;
 
 import taskmanager.exceptions.ManagerCreateException;
+import taskmanager.exceptions.ManagerUpdateException;
 import tasks.Task;
 import tasks.Epic;
 import tasks.Subtask;
 import tasks.TaskStatus;
-
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -18,9 +18,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected final HashMap<Integer, Epic> epics = new HashMap<>();
     protected final HashMap<Integer, Subtask> subtasks = new HashMap<>();
     private final HistoryManager historyManager;
-    Set<Task> prioritizedTasksSet = new TreeSet<>((Task task1, Task task2) -> {
-        return task1.getStartTime().compareTo(task2.getStartTime());
-    });
+    Set<Task> prioritizedTasksSet = new TreeSet<>(Comparator.comparing(Task::getStartTime));
 
     public InMemoryTaskManager(HistoryManager historyManager) {
         this.historyManager = historyManager;
@@ -70,7 +68,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(Task task) {
         if (areTasksIntersected(task)) {
-            return;
+            throw new ManagerUpdateException();
         }
         if (tasks.containsKey(task.getId())) {
             tasks.put(task.getId(), task);
@@ -94,7 +92,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateSubtask(Subtask subtask) {
         if (areTasksIntersected(subtask)) {
-            return;
+            throw new ManagerUpdateException();
         }
         if (subtasks.containsKey(subtask.getId())) {
             subtasks.put(subtask.getId(), subtask);
@@ -301,8 +299,12 @@ public class InMemoryTaskManager implements TaskManager {
         LocalDateTime t1EndTime = t1.getEndTime();
         LocalDateTime t2StartTime = t2.getStartTime();
         LocalDateTime t2EndTime = t2.getEndTime();
-        return (t2StartTime.isAfter(t1StartTime) && t2StartTime.isBefore(t1EndTime)) ||
-                (t2EndTime.isAfter(t1StartTime) && t2EndTime.isBefore(t1EndTime));
+        if (t2StartTime.isEqual(t1StartTime) || t2EndTime.isEqual(t1EndTime)) {
+            return true;
+        } else {
+            return (t2StartTime.isAfter(t1StartTime) && t2StartTime.isBefore(t1EndTime)) ||
+                    (t2EndTime.isAfter(t1StartTime) && t2EndTime.isBefore(t1EndTime));
+        }
     }
 
     @Override

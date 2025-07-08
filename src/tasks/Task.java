@@ -9,7 +9,7 @@ public class Task {
     private final String name;
     private final String description;
     private TaskStatus status;
-    private final TaskType type = TaskType.TASK;
+    private transient final TaskType type = TaskType.TASK;
     private Duration duration;
     private LocalDateTime startTime;
 
@@ -60,7 +60,11 @@ public class Task {
     }
 
     public Duration getDuration() {
-        return duration;
+        if (duration == null) {
+            return Duration.ZERO;
+        } else {
+            return duration;
+        }
     }
 
     public LocalDateTime getStartTime() {
