@@ -9,7 +9,7 @@ public class Task {
     private final String name;
     private final String description;
     private TaskStatus status;
-    private transient final TaskType type = TaskType.TASK;
+    private final transient TaskType type = TaskType.TASK;
     private Duration duration;
     private LocalDateTime startTime;
 
