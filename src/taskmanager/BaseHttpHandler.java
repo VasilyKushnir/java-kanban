@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.sun.net.httpserver.HttpExchange;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -47,50 +48,38 @@ abstract class BaseHttpHandler {
         return Integer.parseInt(getPathArray(h)[2]);
     }
 
-    protected void sendText(HttpExchange h, String text) throws IOException {
-        byte[] resp = text.getBytes(StandardCharsets.UTF_8);
+    protected void sendResponse(HttpExchange h, int statusCode, String responseText) throws IOException {
+        byte[] resp = responseText.getBytes(StandardCharsets.UTF_8);
         h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
-        h.sendResponseHeaders(200, resp.length);
-        h.getResponseBody().write(resp);
-        h.close();
+        h.sendResponseHeaders(statusCode, resp.length);
+        try (OutputStream os = h.getResponseBody()) {
+            os.write(resp);
+        }
+    }
+
+    protected void sendText(HttpExchange h, String text) throws IOException {
+        sendResponse(h, 200, text);
     }
 
     protected void sendCreated(HttpExchange h) throws IOException {
-        h.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
         h.sendResponseHeaders(201, -1);
         h.close();
     }
 
     protected void sendBadRequest(HttpExchange h) throws IOException {
-        String text = "400 Bad Request";
-        byte[] resp = text.getBytes(StandardCharsets.UTF_8);
-        h.sendResponseHeaders(400, resp.length);
-        h.getResponseBody().write(resp);
-        h.close();
+        sendResponse(h, 400, "400 Bad Request");
     }
 
     protected void sendNotFound(HttpExchange h) throws IOException {
-        String text = "404 Not Found";
-        byte[] resp = text.getBytes(StandardCharsets.UTF_8);
-        h.sendResponseHeaders(404, resp.length);
-        h.getResponseBody().write(resp);
-        h.close();
+        sendResponse(h, 404, "404 Not Found");
     }
 
     protected void sendNotAcceptable(HttpExchange h) throws IOException {
-        String text = "406 Not Acceptable";
-        byte[] resp = text.getBytes(StandardCharsets.UTF_8);
-        h.sendResponseHeaders(406, resp.length);
-        h.getResponseBody().write(resp);
-        h.close();
+        sendResponse(h, 406, "406 Not Acceptable");
     }
 
     protected void sendInternalServerError(HttpExchange h, Exception e) throws IOException {
         e.printStackTrace();
-        String text = "500 Internal Server Error";
-        byte[] resp = text.getBytes(StandardCharsets.UTF_8);
-        h.sendResponseHeaders(500, resp.length);
-        h.getResponseBody().write(resp);
-        h.close();
+        sendResponse(h, 500, "500 Internal Error");
     }
 }

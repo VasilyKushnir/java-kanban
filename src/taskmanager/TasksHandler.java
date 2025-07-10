@@ -21,15 +21,15 @@ public class TasksHandler extends BaseHttpHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         try {
-            String method = getMethod(exchange);
+            HttpMethod method = HttpMethod.valueOf(getMethod(exchange));
             switch (method) {
-                case "GET":
+                case GET:
                     get(exchange);
                     break;
-                case "POST":
+                case POST:
                     post(exchange);
                     break;
-                case "DELETE":
+                case DELETE:
                     delete(exchange);
                     break;
                 default:
