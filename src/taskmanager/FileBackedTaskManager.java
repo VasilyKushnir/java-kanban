@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManager {
@@ -70,8 +71,18 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         String taskName = stringTaskArray[2];
         String taskDescription = stringTaskArray[4];
         TaskStatus taskStatus = TaskStatus.valueOf(stringTaskArray[3]);
-        LocalDateTime startTime = LocalDateTime.parse(stringTaskArray[6]);
-        LocalDateTime endTime = LocalDateTime.parse(stringTaskArray[7]);
+        LocalDateTime startTime;
+        try {
+             startTime = LocalDateTime.parse(stringTaskArray[6]);
+        } catch (DateTimeParseException e) {
+            startTime = null;
+        }
+        LocalDateTime endTime;
+        try {
+            endTime = LocalDateTime.parse(stringTaskArray[7]);
+        } catch (DateTimeParseException e) {
+            endTime = null;
+        }
         Duration duration = Duration.ofMinutes(Integer.parseInt(stringTaskArray[8]));
         switch (taskType) {
             case TaskType.EPIC -> {
